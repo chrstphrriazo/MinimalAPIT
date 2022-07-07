@@ -1,13 +1,21 @@
 using MinimalAPIT.SignedAPI;
 using MinimalAPIT.UnsignedAPI;
 
-MyTrades mytrades = new MyTrades();
-TickerPrice tickerprice = new TickerPrice();
+SignedAPI signedAPI = new SignedAPI();
+UnsignedAPI unsignedAPI = new UnsignedAPI();
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/myTrades", () => mytrades.myTrades());
-app.MapGet("/ticker/price", () => tickerprice.getTickerPrice());
+//Signed API Calls
+app.MapGet("/myTrades", () => signedAPI.getTrades());
+app.MapGet("/myAccount", () => signedAPI.getAccount());
+app.MapGet("/allOrders", () => signedAPI.getAllOrders());
+
+//Unsigned API Calls
+app.MapGet("/ticker/price", () => unsignedAPI.getTickerPrice());
+app.MapGet("/depth", () => unsignedAPI.getDepth());
+app.MapGet("/ping", () => unsignedAPI.getConnectivityStatus());
+
 
 app.Run();
