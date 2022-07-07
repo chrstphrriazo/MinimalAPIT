@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace MinimalAPIT.SignedAPI
 {
-    public class Class
+    public class MyTrades
     {
         public async Task<string> myTrades()
         {
