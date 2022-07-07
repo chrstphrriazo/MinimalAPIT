@@ -11,3 +11,4 @@ Unsigned API Endpoints
 https://localhost:xxxx/ticker/price
 https://localhost:xxxx/depth
 https://localhost:xxxx/ping
+
