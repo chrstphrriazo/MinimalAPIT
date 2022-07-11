@@ -7,37 +7,37 @@ namespace MinimalAPIT.SignedAPI
 {
     public class SignedAPI
     {
-        public async Task<string> getAccount()
+        public async Task<string> getAccount(string API_Key, String API_Secret)
         {
-            //Testnet Keys
-            string API_Key = "C1QdD0R3LvdgFXFjKQSQUtbeHQVMBZAXW9XKs0eshOepUUiyw6c4840CfCXp1Z8x";
-            string API_Secret = "5iNjgz7CZ1yUK5P3LqgswFRWqtkiraTUhWyyBGAEnMUHbSObzWLp5FWxfqDgmQGp";
             string baseurl = "https://testnet.binance.vision/api/v3/account?";
-            string dataQueryString = "recvWindow=15000&timestamp=" + Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
+            string timestamp = Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
+            string dataQueryString = "recvWindow=15000&timestamp=" + timestamp;
+            string signature = "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower();
+            string finalQuery = baseurl + dataQueryString + signature;
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("X-MBX-APIKEY", API_Key);
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            HttpResponseMessage response = await client.GetAsync(finalQuery);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            return responseBody;
+
+        }
+
+        public async Task<string> getTrades(string API_Key, String API_Secret)
+        {
+            string baseurl = "https://testnet.binance.vision/api/v3/rateLimit/order?";
+            string timestamp = Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
+            string dataQueryString = "timestamp=" + timestamp;
+            string signature = "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower();
+            string finalQuery = baseurl + dataQueryString + signature;
             
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("X-MBX-APIKEY", API_Key);
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
-            HttpResponseMessage response = await client.GetAsync(baseurl + dataQueryString + "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower());
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return responseBody;
-
-        }
-
-        public async Task<string> getTrades()
-        {
-            //Testnet Keys
-            //API Keys
-            string API_Key = "jVWv9p2Ca2ynxFFx3fPel4uztkXUcBFt5tbuhg0vlMFMNOmCsD5VVQqkX3Pfhwtt";
-            string API_Secret = "LZw6njP1b8j0lExz8JlFAA2MH1i8cJ1I9oNClFZJEdIW1tWZebzmdmoCbxcs3Up4";
-            string baseurl = "https://api.binance.com/api/v3/myTrades?";
-            string dataQueryString = "symbol=SLPBUSD&timestamp=" + Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-MBX-APIKEY", API_Key);
-            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
-            HttpResponseMessage response = await client.GetAsync(baseurl + dataQueryString + "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower());
+            HttpResponseMessage response = await client.GetAsync(finalQuery);
             response.EnsureSuccessStatusCode();
 
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -46,18 +46,19 @@ namespace MinimalAPIT.SignedAPI
 
         }
 
-        public async Task<string> getAllOrders()
+        public async Task<string> getAllOrders(string API_Key, String API_Secret)
         {
-            //Testnet Keys
-            string API_Key = "C1QdD0R3LvdgFXFjKQSQUtbeHQVMBZAXW9XKs0eshOepUUiyw6c4840CfCXp1Z8x";
-            string API_Secret = "5iNjgz7CZ1yUK5P3LqgswFRWqtkiraTUhWyyBGAEnMUHbSObzWLp5FWxfqDgmQGp";
-            string baseurl = "https://testnet.binance.vision/api/v3/allOrders?";
-            string dataQueryString = "symbol=BTCUSDT&timestamp=" + Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
+            string baseurl = "https://testnet.binance.vision/api/v3/allOrders?"; 
+            string timestamp = Math.Round(Convert.ToDecimal(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds), 0).ToString();
+            string dataQueryString = "symbol=BTCUSDT&timestamp=" + timestamp;
+            string signature = "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower();
+            string finalQuery = baseurl + dataQueryString + signature;
+            
 
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("X-MBX-APIKEY", API_Key);
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
-            HttpResponseMessage response = await client.GetAsync(baseurl + dataQueryString + "&signature=" + BitConverter.ToString(new HMACSHA256(Encoding.ASCII.GetBytes(API_Secret)).ComputeHash(Encoding.ASCII.GetBytes(dataQueryString))).Replace("-", string.Empty).ToLower());
+            HttpResponseMessage response = await client.GetAsync(finalQuery);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
