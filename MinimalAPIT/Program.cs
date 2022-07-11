@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 string data_key = builder.Configuration.GetSection("keys").GetSection("API_Key").Value;
 string data_secret = builder.Configuration.GetSection("keys").GetSection("SECRET_Key").Value;
 
-Console.WriteLine(data_key);
-Console.WriteLine(data_secret);
 var app = builder.Build();
 
 //Signed API Calls
