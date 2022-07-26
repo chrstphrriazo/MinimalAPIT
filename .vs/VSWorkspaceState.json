@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\MinimalAPIT",
-    "\\MinimalAPIT\\SignedAPI"
+    "\\MinimalAPIT\\SignedAPI",
+    "\\MinimalAPIT\\UnsignedAPI"
   ],
-  "SelectedNode": "\\MinimalAPIT\\SignedAPI\\SignedAPI.cs",
+  "SelectedNode": "\\MinimalAPIT.sln",
   "PreviewInSolutionExplorer": false
 }
