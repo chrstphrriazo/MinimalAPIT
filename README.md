@@ -4,7 +4,7 @@ Available GET Endpoints
 
 Signed API Endpoints
 
-https://localhost:xxxx/mytrades
+https://localhost:xxxx/rateLimit/order
 
 https://localhost:xxxx/myaccount
 
